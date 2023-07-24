@@ -32,8 +32,11 @@
           :tasks="tasks"
           group-name="taskList"
           @remove="removeTask"
+          @edit-properties="editProperties"
         />
       </div>
+      
+      <PropertiesModal ref="propertiesModal" />
     </div>
   </div>
 </template>
@@ -43,12 +46,14 @@
  import NestedDraggable from '@/components/NestedDraggable';
 import { useTaskStore } from "@/stores/tasks";
 import { mapState, mapActions } from "pinia";
+import PropertiesModal from "@/components/Modals/PropertiesModal";
 
 export default {
   name: 'HomeView',
   components: {
     draggable,
-    NestedDraggable
+    NestedDraggable,
+    PropertiesModal
   },
   data() {
     return { 
@@ -79,6 +84,9 @@ export default {
         list.splice(index, 1);
       }
     },
+    editProperties: function() {
+      this.$refs.propertiesModal.showModal();
+    }
   },
 };
 </script>

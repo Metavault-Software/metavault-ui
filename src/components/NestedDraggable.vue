@@ -19,7 +19,8 @@
             <a
               href="#"
               class="btn btn-primary text-white"
-            >Go somewhere</a>
+              @click="$emit('editProperties', $event)"
+            >Edit Properties</a>
             <a
               href="#"
               class="btn btn-danger text-white"
@@ -32,6 +33,7 @@
           :group-name="groupName"
           :padded="true"
           @remove="$emit('remove', $event)"
+          @edit-properties="$emit('editProperties', $event)"
         />
       </div>
     </template>
@@ -60,7 +62,7 @@ export default {
       type: Boolean
     }
   },
-  emits: ['remove'], 
+  emits: ['remove', 'editProperties'], 
   data() {
     return {
     }
@@ -68,7 +70,7 @@ export default {
   methods: {
     removeItem: function (item) {
       this.$emit('remove', { item, list: this.tasks });
-    },
+    }
   }
 
 };

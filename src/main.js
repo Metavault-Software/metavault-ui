@@ -6,6 +6,7 @@ import router from "./router";
 import "@/scss/custom.scss";
 
 import '@/utilities/axios-config';
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -15,4 +16,3 @@ app.use(pinia);
 
 app.mount('#app');
 
-import "bootstrap/dist/js/bootstrap.js";
