@@ -5,6 +5,8 @@ import App from './App.vue';
 import router from "./router";
 import "@/scss/custom.scss";
 
+import '@/utilities/axios-config';
+
 const pinia = createPinia();
 const app = createApp(App);
 

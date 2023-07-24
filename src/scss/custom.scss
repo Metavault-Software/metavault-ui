@@ -1,4 +1,14 @@
 // Custom.scss
+$primary: $metavault-primary;
+$secondary: $metavault-secondary;
+$success: $metavault-success;
+$warning: $metavault-warning;
+$danger: $metavault-error;
+
+$table-hover-bg: $shades-heather;
+
+$border-color: $neutral-gray-50;
+$card-border-color: $neutral-gray-50;
 
 @import "bootstrap/scss/bootstrap";
 
