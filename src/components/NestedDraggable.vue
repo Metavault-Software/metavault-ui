@@ -7,31 +7,33 @@
     :item-key="task => task.id"
   >
     <template #item="{element}">
-      <div :class="padded? 'px-5': ''">
-        <div class="card list-group-item">
-          <div class="card-body">
-            <h5 class="card-title">
-              {{ element.name }}
-            </h5>
-            <p class="card-text">
-              {{ element.description }}
-            </p>
-            <a
-              href="#"
-              class="btn btn-primary text-white"
-              @click="$emit('editProperties', $event)"
-            >Edit Properties</a>
-            <a
-              href="#"
-              class="btn btn-danger text-white"
-              @click="removeItem(element)"
-            >Remove</a>
+      <div>
+        <div class="list-group-item">
+          <div class="row">
+            <div class="col-9">
+              <h5>
+                {{ element.name }}
+              </h5>
+            </div>
+            <div class="col-1">
+              <a
+                href="#"
+                class="btn btn-primary text-white"
+                @click="$emit('editProperties', $event)"
+              >E</a>
+            </div>
+            <div class="col-1">
+              <a
+                href="#"
+                class="btn btn-danger text-white"
+                @click="removeItem(element)"
+              >R</a>
+            </div>
           </div>
         </div>
         <NestedDraggable
           :tasks="element.children"
           :group-name="groupName"
-          :padded="true"
           @remove="$emit('remove', $event)"
           @edit-properties="$emit('editProperties', $event)"
         />
@@ -55,11 +57,6 @@ export default {
     groupName: {
       required: true,
       type: String
-    },
-    padded: {
-      required: false,
-      default: false,
-      type: Boolean
     }
   },
   emits: ['remove', 'editProperties'], 
@@ -78,16 +75,13 @@ export default {
 <style scoped>
 .dragArea {
   min-height: 1rem;
-  border: 1px dashed #dee2e6;
-  border-radius: 0.25rem;
-  margin: 1rem;
+  margin-left: 2rem;
 }
 
 .ghost {
   opacity: 0.4;
 }
-
-.card {
-  margin-bottom: 1rem;
+.list-group-item {
+  width: 480px;
 }
 </style>

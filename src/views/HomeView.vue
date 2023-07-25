@@ -1,10 +1,22 @@
 <template>
   <div class="home">
     <div class="row">
-      <div class="col-4">
+      <div class="col-3">
         <h3>Agents</h3>
+        
+        <div class="input-group">
+          <span class="input-group-text"><metavault-icon name="search" /></span>
+          <input
+            class="form-control search-input"
+            type="search"
+            placeholder="search"
+            aria-label="Search"
+            @input="searchAgents"
+          >
+        </div>
+        
         <draggable
-          :list="taskSpecs"
+          :list="filteredTaskSpecs"
           class="dragArea list-group"
           :item-key="task => task.id"
           ghost-class="ghost"
@@ -12,22 +24,17 @@
           :clone="taskCloned"
         >
           <template #item="{element}">
-            <div class="card list-group-item">
-              <div class="card-body">
-                <h5 class="card-title">
-                  {{ element.name }}
-                </h5>
-                <p class="card-text">
-                  {{ element.description }}
-                </p>
-              </div>
+            <div class="list-group-item">
+              <h5>
+                {{ element.name }}
+              </h5>
             </div>
           </template>
         </draggable>
       </div>
 
-      <div class="col-8">
-        <h3>Current Process</h3>
+      <div class="col-4">
+        <h3>Workflow</h3>
         <NestedDraggable
           :tasks="tasks"
           group-name="taskList"
@@ -37,28 +44,31 @@
       </div>
       
       <PropertiesModal ref="propertiesModal" />
-    </div>
+    </div> 
   </div>
 </template>
 
 <script>
- import draggable from 'vuedraggable';
- import NestedDraggable from '@/components/NestedDraggable';
+import draggable from 'vuedraggable';
+import NestedDraggable from '@/components/NestedDraggable';
 import { useTaskStore } from "@/stores/tasks";
 import { mapState, mapActions } from "pinia";
 import PropertiesModal from "@/components/Modals/PropertiesModal";
+import MetavaultIcon from "@/components/MetaVaultIcon"
 
 export default {
   name: 'HomeView',
   components: {
     draggable,
     NestedDraggable,
-    PropertiesModal
+    PropertiesModal,
+    MetavaultIcon
   },
   data() {
     return { 
       tasks: [],
-      nextId: 0
+      nextId: 0,
+      filteredTaskSpecs: []
     }
   },
   computed: {
@@ -66,6 +76,8 @@ export default {
   },
   mounted: function () {
     this.fetchTaskSpecs();
+
+    this.filteredTaskSpecs = this.taskSpecs;
   },
   methods: {
     ...mapActions(useTaskStore, ["fetchTaskSpecs"]),
@@ -78,6 +90,13 @@ export default {
         children: []
       }
     }, 
+    searchAgents: function (evt) {
+      if (evt.data == null){
+        this.filteredTaskSpecs = this.taskSpecs;
+      }else {
+        this.filteredTaskSpecs = this.taskSpecs.filter(x => x.name.includes(evt.data));
+      }
+    },
     removeTask: function ({ item, list }) {
       const index = list.findIndex(t => t.id === item.id);
       if (index !== -1) {
@@ -88,13 +107,5 @@ export default {
       this.$refs.propertiesModal.showModal();
     }
   },
-};
+}; 
 </script>
-
-
-<style>
-.card {
-  width: 360px;
-}
-
-</style>
