@@ -1,10 +1,16 @@
 <template>
   <div class="home">
-    <div class="row">
+    <div
+      class="row"
+      style="padding-left: 1em;"
+    >
       <div class="col-3">
         <h3>Agents</h3>
         
-        <div class="input-group">
+        <div
+          class="input-group"
+          style="padding-bottom: 1em;"
+        >
           <span class="input-group-text"><metavault-icon name="search" /></span>
           <input
             class="form-control search-input"
