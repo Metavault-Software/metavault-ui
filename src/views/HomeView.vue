@@ -39,7 +39,10 @@
         </draggable>
       </div>
 
-      <div class="col-4">
+      <div
+        class="col-6"
+        style="overflow: auto; height: 90vh;"
+      >
         <h3>Workflow</h3>
         <NestedDraggable
           :tasks="tasks"
@@ -49,7 +52,15 @@
         />
       </div>
       
-      <PropertiesModal ref="propertiesModal" />
+      <div class="col-3">
+        <h3>Properties</h3>
+        <div v-if="selectedTask">
+          <p>id: {{ selectedTask.id }}</p>
+          <p>taskID: {{ selectedTask.taskId }}</p>
+          <p>name: {{ selectedTask.name }}</p>
+          <p>args: {{ selectedTask.args }}</p>
+        </div> 
+      </div>
     </div> 
   </div>
 </template>
@@ -59,7 +70,6 @@ import draggable from 'vuedraggable';
 import NestedDraggable from '@/components/NestedDraggable';
 import { useTaskStore } from "@/stores/tasks";
 import { mapState, mapActions } from "pinia";
-import PropertiesModal from "@/components/Modals/PropertiesModal";
 import MetavaultIcon from "@/components/MetaVaultIcon"
 
 export default {
@@ -67,14 +77,14 @@ export default {
   components: {
     draggable,
     NestedDraggable,
-    PropertiesModal,
     MetavaultIcon
   },
   data() {
     return { 
       tasks: [],
       nextId: 0,
-      filteredTaskSpecs: []
+      filteredTaskSpecs: [],
+      selectedTask: null
     }
   },
   computed: {
@@ -88,7 +98,6 @@ export default {
   methods: {
     ...mapActions(useTaskStore, ["fetchTaskSpecs"]),
     taskCloned: function(clone) {
-      console.log(this.tasks);
       return {
         id: this.nextId++,
         taskId: clone.taskId,
@@ -109,8 +118,8 @@ export default {
         list.splice(index, 1);
       }
     },
-    editProperties: function() {
-      this.$refs.propertiesModal.showModal();
+    editProperties: function({ item, list}) {
+      this.selectedTask = item;
     }
   },
 }; 

@@ -19,7 +19,7 @@
               <a
                 href="#"
                 class="btn btn-primary text-white"
-                @click="$emit('editProperties', $event)"
+                @click="editProperties(element)"
               >E</a>
             </div>
             <div class="col-1">
@@ -67,6 +67,9 @@ export default {
   methods: {
     removeItem: function (item) {
       this.$emit('remove', { item, list: this.tasks });
+    },
+    editProperties: function (item) {
+      this.$emit('editProperties', {item, list: this.tasks})
     }
   }
 

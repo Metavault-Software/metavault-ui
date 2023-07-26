@@ -12,10 +12,12 @@ export const useTaskStore = defineStore('tasks', {
       var index = 0;
 
       response.data.forEach((item) => {
+        console.log(item);
         var task = {
           id: index,
           taskId: item.Id,
           name: item.Name,
+          args: item.Args,
           children: []
         }
         
