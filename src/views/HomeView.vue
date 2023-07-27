@@ -1,8 +1,10 @@
 <template>
-  <div class="home">
+  <div
+    class="home px-2"
+    style="overflow: hidden;"
+  >
     <div
       class="row"
-      style="padding-left: 1em;"
     >
       <div class="col-3">
         <h3>Agents</h3>
@@ -41,15 +43,18 @@
 
       <div
         class="col-6"
-        style="overflow: auto; height: 90vh;"
       >
         <h3>Workflow</h3>
-        <NestedDraggable
-          :tasks="tasks"
-          group-name="taskList"
-          @remove="removeTask"
-          @edit-properties="editProperties"
-        />
+        <div
+          style="overflow: auto; height: 90vh;"
+        >
+          <NestedDraggable
+            :tasks="tasks"
+            group-name="taskList"
+            @remove="removeTask"
+            @edit-properties="editProperties"
+          />
+        </div>
       </div>
       
       <div class="col-3">
