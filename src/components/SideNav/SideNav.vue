@@ -108,6 +108,12 @@ export default {
                     children: [],
                 },
                 {
+                    name: "Workflows",
+                    link: "/workflows",
+                    icon: "workflow",
+                    children: [],
+                },
+                {
                     name: "About",
                     link: "/about",
                     icon: "about",

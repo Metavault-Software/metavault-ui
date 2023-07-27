@@ -8,6 +8,7 @@ export const useTaskStore = defineStore('tasks', {
 
   actions: {
     async fetchTaskSpecs() {
+      this.taskSpecs = [];
       const response = await axios.get("/tasks");
       var index = 0;
 

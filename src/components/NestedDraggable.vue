@@ -8,19 +8,15 @@
   >
     <template #item="{element}">
       <div>
-        <div class="list-group-item">
+        <div
+          class="list-group-item"
+          @click="editProperties($event,element)"
+        >
           <div class="row">
-            <div class="col-9">
+            <div class="col-10">
               <h5>
                 {{ element.name }}
               </h5>
-            </div>
-            <div class="col-1">
-              <a
-                href="#"
-                class="btn btn-primary text-white"
-                @click="editProperties(element)"
-              >E</a>
             </div>
             <div class="col-1">
               <a
@@ -68,9 +64,10 @@ export default {
     removeItem: function (item) {
       this.$emit('remove', { item, list: this.tasks });
     },
-    editProperties: function (item) {
-      this.$emit('editProperties', {item, list: this.tasks})
-    }
+    editProperties: function ($event, item) {
+     
+      this.$emit('editProperties', {$event, item, list: this.tasks});
+    },
   }
 
 };
