@@ -13,7 +13,7 @@
           @click="editProperties($event,element)"
         >
           <div class="row">
-            <div class="col-10">
+            <div class="col-11">
               <h5>
                 {{ element.name }}
               </h5>
@@ -21,9 +21,10 @@
             <div class="col-1">
               <a
                 href="#"
-                class="btn btn-danger text-white"
                 @click="removeItem(element)"
-              >R</a>
+              >
+                <MetaVaultIcon name="delete" />
+              </a>
             </div>
           </div>
         </div>
@@ -39,11 +40,13 @@
 </template>
 <script>
 import draggable from "vuedraggable";
+import MetaVaultIcon from "./MetaVaultIcon.vue";
 
 export default {
   name: "NestedDraggable",
   components: {
-    draggable
+    draggable,
+    MetaVaultIcon
   },
   props: {
     tasks: {

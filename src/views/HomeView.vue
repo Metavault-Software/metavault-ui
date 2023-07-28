@@ -5,32 +5,33 @@
       <div>
         <button
           class="btn btn-primary text-white"
-          @click="createWorkflow"
+          @click="showCreateWorkflowModal"
         >
           Create Workflow
         </button>
       </div>
     </div>
+
+    <CreateWorkflowModal ref="createWorkflow" />
   </div>
 </template>
 
 <script>
-import router from '@/router';
-
+import CreateWorkflowModal from '@/components/Modals/CreateWorkflowModal.vue';
 
 export default {
   name: 'HomeView',
   components: {
-    
-  },
+    CreateWorkflowModal
+},
   data() {
     return { 
       
     }
   },
   methods: {
-    createWorkflow: function() {
-      router.push({ name: 'workflows'})
+    showCreateWorkflowModal: function() {
+      this.$refs.createWorkflow.showModal();
     }
   }
 }; 
