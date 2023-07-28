@@ -22,7 +22,9 @@
           <label
             for="workflow-name"
             class="form-label"
-          >New Workflow Name</label>
+          >
+            New Workflow Name
+          </label>
           <div class="input-group">
             <input
               id="workflow-name"
