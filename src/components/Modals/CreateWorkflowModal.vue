@@ -41,7 +41,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Close
+            Cancel
           </button>
           <button
             type="button"
