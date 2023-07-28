@@ -28,6 +28,7 @@
               id="workflow-name"
               v-model="workflowName"
               type="text"
+              placeholder="My Workflow"
               class="form-control"
             >
           </div>
@@ -42,7 +43,7 @@
           </button>
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-primary text-white"
             @click="createWorkflow"
           >
             Create
