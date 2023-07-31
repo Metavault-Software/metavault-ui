@@ -80,7 +80,12 @@
 <script>
 export default {
   name: 'PropertiesPanel',
-  props: ['task'],
+  props: {
+    task: {
+      type: Object, 
+      default: null
+    }
+  },
   emits: ['update-task'],
   methods: {
     updateArg(key, value) {
