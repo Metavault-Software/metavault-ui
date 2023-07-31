@@ -9,22 +9,18 @@ export const useTaskStore = defineStore('tasks', {
   actions: {
     async fetchTaskSpecs() {
       this.taskSpecs = [];
-      const response = await axios.get("/tasks");
-      var index = 0;
-
+      const response = await axios.get("/agents");
       response.data.forEach((item) => {
         var task = {
-          id: index,
-          taskId: item.Id,
-          name: item.Name,
-          args: item.Args,
+          id: item.id,
+          name: item.name,
+          args: item.args,
           children: []
         }
         
-        index++;
         this.taskSpecs.push(task);
       }); 
-
+      this.taskSpecs.sort((a, b) => a.id - b.id);
     }
   }
 });

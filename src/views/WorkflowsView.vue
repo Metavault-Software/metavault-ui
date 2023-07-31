@@ -15,6 +15,7 @@
         >
           <span class="input-group-text"><metavault-icon name="search" /></span>
           <input
+            v-model="searchText"
             class="form-control search-input"
             type="search"
             placeholder="search"
@@ -58,14 +59,11 @@
       </div>
       
       <div class="col-4">
-        <h3>Properties</h3>
-        <div v-if="selectedTask">
-          <p>id: {{ selectedTask.id }}</p>
-          <p>taskID: {{ selectedTask.taskId }}</p>
-          <p>name: {{ selectedTask.name }}</p>
-          <p>args: {{ selectedTask.args }}</p>
-        </div> 
-      </div>
+        <PropertiesPanel
+          :task="selectedTask"
+          @update-task="updateTask"
+        />
+      </div> 
     </div>
 
     <WorkflowFooter />
@@ -76,6 +74,7 @@
 import draggable from 'vuedraggable';
 import NestedDraggable from '@/components/NestedDraggable';
 import WorkflowFooter from '@/components/WorkflowFooter';
+import PropertiesPanel from '@/components/PropertiesPanel';
 import { useTaskStore } from "@/stores/tasks";
 import { mapState, mapActions } from "pinia";
 import MetavaultIcon from "@/components/MetaVaultIcon"
@@ -86,12 +85,14 @@ export default {
     draggable,
     NestedDraggable,
     WorkflowFooter,
+    PropertiesPanel,
     MetavaultIcon
   },
   data() {
     return { 
       tasks: [],
       nextId: 0,
+      searchText: "",
       filteredTaskSpecs: [],
       selectedTask: null,
       selectedElement: null
@@ -110,8 +111,8 @@ export default {
     taskCloned: function(clone) {
       return {
         id: this.nextId++,
-        taskId: clone.taskId,
         name: clone.name,
+        args: clone.args,
         children: []
       }
     }, 
@@ -119,7 +120,7 @@ export default {
       if (evt.data == null){
         this.filteredTaskSpecs = this.taskSpecs;
       }else {
-        this.filteredTaskSpecs = this.taskSpecs.filter(x => x.name.includes(evt.data));
+        this.filteredTaskSpecs = this.taskSpecs.filter(x => x.name.toLowerCase().includes(this.searchText.toLowerCase()));
       }
     },
     removeTask: async function ({ item, list }) {
@@ -131,25 +132,49 @@ export default {
     editProperties: function({$event, item, list}) {
       let targetElement = $event.target;
 
-      // Traverse up the DOM
       while (targetElement != null) {
         if (targetElement.classList.contains("list-group-item")){
-          // If there is a currently selected element, remove the bg-secondary class from it
+
+          if (this.selectedTask && this.selectedTask.id === item.id) {
+            targetElement.classList.remove("bg-secondary");
+
+            this.selectedElement = null;
+            this.selectedTask = null;
+
+            return;
+          }
+
           if (this.selectedElement) {
             this.selectedElement.classList.remove("bg-secondary");
           }
           
-          // Add the bg-secondary class to the newly selected element
           targetElement.classList.add("bg-secondary");
-          
-          // Update the currently selected element
           this.selectedElement = targetElement;
           break;
         }
         targetElement = targetElement.parentElement;
       }
+
       this.selectedTask = item;
+    },
+
+    updateTask(updatedTask) {
+      this.updateTaskInList(this.tasks, updatedTask);
+    },
+    updateTaskInList(taskList, updatedTask) {
+    for (let i = 0; i < taskList.length; i++) {
+      if (taskList[i].id === updatedTask.id) {
+        Object.assign(taskList[i], updatedTask);
+        return true;
+      } 
+      else if (taskList[i].children && taskList[i].children.length > 0) {
+        if (this.updateTaskInList(taskList[i].children, updatedTask)) {
+          return true;
+        }
+      }
     }
-  },
+    return false;
+  }
+  }
 }; 
 </script>
