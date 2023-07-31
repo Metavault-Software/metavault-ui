@@ -1,13 +1,16 @@
 <template>
   <div
     class="task-properties"
-    style="overflow-y: auto; max-height: 88vh;"
+    style="overflow-y: auto; max-height: 89vh;"
   >
     <div
       v-if="task"
       class="card"
     >
-      <div class="card-header">
+      <div
+        class="card-header bg-light"
+        style="position: sticky; top: 0; z-index: 1;"
+      >
         <h3>Task Details</h3>
       </div>
       <div class="card-body">

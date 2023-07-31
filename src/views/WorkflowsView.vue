@@ -7,66 +7,87 @@
       class="row"
     >
       <div class="col-3">
-        <h3>Agents</h3>
-        
         <div
-          class="input-group"
-          style="padding-bottom: 1em;"
+          class="card"
+          style="overflow: auto; height: 89vh;"
         >
-          <span class="input-group-text"><metavault-icon name="search" /></span>
-          <input
-            v-model="searchText"
-            class="form-control search-input"
-            type="search"
-            placeholder="search"
-            aria-label="Search"
-            @input="searchAgents"
+          <div 
+            class="card-header bg-light"
+            style="position: sticky; top: 0; z-index: 1;"
           >
-        </div>
-        
-        <draggable
-          :list="filteredTaskSpecs"
-          class="dragArea list-group"
-          :item-key="task => task.id"
-          ghost-class="ghost"
-          :group="{ name: 'taskList', pull: 'clone', put: false }"
-          :clone="taskCloned"
-        >
-          <template #item="{element}">
-            <div class="list-group-item">
-              <h5>
-                {{ element.name }}
-              </h5>
+            <h3>Agents</h3>
+          </div>
+          <div class="card-body">
+            <div
+              class="input-group"
+              style="padding-bottom: 1em;"
+            >
+              <span class="input-group-text"><metavault-icon name="search" /></span>
+              <input
+                v-model="searchText"
+                class="form-control search-input"
+                type="search"
+                placeholder="search"
+                aria-label="Search"
+                @input="searchAgents"
+              >
             </div>
-          </template>
-        </draggable>
+        
+            <draggable
+              :list="filteredTaskSpecs"
+              class="dragArea list-group"
+              :item-key="task => task.id"
+              ghost-class="ghost"
+              :group="{ name: 'taskList', pull: 'clone', put: false }"
+              :clone="taskCloned"
+            >
+              <template #item="{element}">
+                <div class="list-group-item">
+                  <h5>
+                    {{ element.name }}
+                  </h5>
+                </div>
+              </template>
+            </draggable>
+          </div>
+        </div>
       </div>
-
+        
       <div
         class="col-5"
       >
-        <h3>Workflow</h3>
         <div
-          style="overflow: auto; height: 85vh;"
+          class="card"
+          style="overflow: auto; height: 89vh;"
         >
-          <NestedDraggable
-            :tasks="tasks"
-            group-name="taskList"
-            @remove="removeTask"
-            @edit-properties="editProperties"
-          />
+          <div
+            class="card-header bg-light"
+            style="position: sticky; top: 0; z-index: 1;"
+          >
+            <h3>Workflow</h3>
+          </div>
+          <div class="card-body">
+            <div>
+              <NestedDraggable
+                :tasks="tasks"
+                group-name="taskList"
+                @remove="removeTask"
+                @edit-properties="editProperties"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-      
+      </div> 
+        
       <div class="col-4">
         <PropertiesPanel
           :task="selectedTask"
           @update-task="updateTask"
         />
-      </div> 
-    </div>
+      </div>
 
-    <WorkflowFooter />
+      <WorkflowFooter />
+    </div>
   </div>
 </template>
 
