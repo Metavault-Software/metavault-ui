@@ -1,85 +1,90 @@
 <template>
   <div>
     <div
-      id="nav-collapse"
-      class="collapse collapse-horizontal show p-0 d-none d-lg-block"
+        id="nav-collapse"
+        class="collapse collapse-horizontal show p-0 d-none d-lg-block"
     >
       <div class="side-nav bg-white border-end">
         <nav class="navbar py-4 px-4 h-100">
           <div class="container-fluid h-100 align-items-start">
             <button
-              id="nav-toggle"
-              class="btn position-absolute top-0 end-0 border-0"
-              data-bs-toggle="collapse"
-              data-bs-target="#nav-collapse"
-              aria-expanded="true"
-              aria-controls="nav-collapse"
-              type="button"
-              @click="navCollapse()"
+                id="nav-toggle"
+                class="btn position-absolute top-0 end-0 border-0"
+                data-bs-toggle="collapse"
+                data-bs-target="#nav-collapse"
+                aria-expanded="true"
+                aria-controls="nav-collapse"
+                type="button"
+                @click="navCollapse()"
             >
               <MetaVaultIcon
-                :name="navExpanded ? 'menu-close' : 'menu-open'"
-                size="extra-large"
+                  :name="navExpanded ? 'menu-close' : 'menu-open'"
+                  size="extra-large"
               />
             </button>
             <ul
-              id="nav-items"
-              class="navbar-nav mt-4"
+                id="nav-items"
+                class="navbar-nav mt-4"
             >
               <li
-                v-for="item in navItems"
-                :key="item"
-                class="nav-item my-2"
+                  v-for="item in navItems"
+                  :key="item"
+                  class="nav-item my-2"
               >
                 <button
-                  ref="navItemElements"
-                  class="bg-transparent border-0"
-                  data-bs-toggle="collapse"
-                  aria-expanded="false"
-                  :aria-controls="'collapse' + item.name"
-                  :data-bs-target="navExpanded ? '#collapse' + item.name : ''"
-                  type="button"
-                  @click="!item.children.length && manageSubMenus()"
+                    ref="navItemElements"
+                    class="bg-transparent border-0"
+                    data-bs-toggle="collapse"
+                    aria-expanded="false"
+                    :aria-controls="'collapse' + item.name"
+                    :data-bs-target="navExpanded ? '#collapse' + item.name : ''"
+                    type="button"
+                    @click="!item.children.length && manageSubMenus()"
                 >
                   <router-link
-                    class="nav-link fs-6 d-flex align-items-center"
-                    :to="item.link"
+                      class="nav-link fs-6 d-flex align-items-center"
+                      :to="item.link"
                   >
                     <MetaVaultIcon
-                      :name="item.icon"
-                      class="nav-icon float-start mx-2"
-                      has-fill
+                        :name="item.icon"
+                        class="nav-icon float-start mx-2"
+                        has-fill
                     />
                     <span class="nav-text">{{ item.name }}</span>
                   </router-link>
                 </button>
                 <ul
-                  v-if="item.children.length"
-                  :id="'collapse' + item.name"
-                  ref="collapsibleMenus"
-                  class="collapse sub-nav-items"
-                  data-bs-parent="#nav-items"
+                    v-if="item.children.length"
+                    :id="'collapse' + item.name"
+                    ref="collapsibleMenus"
+                    class="collapse sub-nav-items"
+                    data-bs-parent="#nav-items"
                 >
                   <li
-                    v-for="child in item.children"
-                    :key="child"
-                    class="my-2"
+                      v-for="child in item.children"
+                      :key="child"
+                      class="my-2"
                   >
                     <router-link
-                      :to="child.link"
-                      class="text-decoration-none sub-nav-item d-flex align-items-center"
+                        :to="child.link"
+                        class="text-decoration-none sub-nav-item d-flex align-items-center"
                     >
                       <div style="width:32px; text-align: center;">
                         <MetaVaultIcon
-                          :name="child.icon"
-                          size="medium"
-                          class="float-start mx-2"
+                            :name="child.icon"
+                            size="medium"
+                            class="float-start mx-2"
                         />
                       </div>
                       <span class="small-bold">{{ child.name }}</span>
                     </router-link>
                   </li>
                 </ul>
+              </li>
+              <li class="nav-item my-2">
+                <button @click="signOut" class="bg-transparent border-0">
+                  <span class="nav-link fs-6 d-flex align-items-center">Sign Out</span>
+                </button>
               </li>
             </ul>
           </div>
@@ -91,88 +96,103 @@
 
 <script>
 import MetaVaultIcon from "../MetaVaultIcon.vue";
-import { mapActions, mapState } from "pinia";
-import { useSideNavStore } from '@/stores/sideNav';
+import {mapActions, mapState} from "pinia";
+import {useSideNavStore} from '@/stores/sideNav';
+import axios from "axios";
+import {useAuthStore} from "@/store";
 
 export default {
-    name: "SideNav",
-    components: { MetaVaultIcon },
-    data() {
-        return {
-            navExpanded: true,
-            navItems: [
-                {
-                    name: "Home",
-                    link: "/",
-                    icon: "home",
-                    children: [],
-                },
-                {
-                    name: "Workflows",
-                    link: "/workflows",
-                    icon: "workflow",
-                    children: [],
-                },
-                {
-                    name: "About",
-                    link: "/about",
-                    icon: "about",
-                    children: [],
-                },
-            ]
-        };
-    },
-    computed: {
-        ...mapState(useSideNavStore, ["shouldCollapse"])
-    },
-    watch: {
-        shouldCollapse: function (value) {
-            if (value) {
-                this.collapseExpandedSubMenus();
-            }
+  name: "SideNav",
+  components: {MetaVaultIcon},
+  data() {
+    return {
+      navExpanded: true,
+      navItems: [
+        {
+          name: "Home",
+          link: "/",
+          icon: "home",
+          children: [],
+        },
+        {
+          name: "Workflows",
+          link: "/workflows",
+          icon: "workflow",
+          children: [],
+        },
+        {
+          name: "About",
+          link: "/about",
+          icon: "about",
+          children: [],
+        },
+      ]
+    };
+  },
+  computed: {
+    ...mapState(useSideNavStore, ["shouldCollapse"])
+  },
+  watch: {
+    shouldCollapse: function (value) {
+      if (value) {
+        this.collapseExpandedSubMenus();
+      }
+    }
+  },
+  methods: {
+    ...mapActions(useSideNavStore, ["resetShouldCollapse"]),
+    navCollapse() {
+      if (window.Intercom) {
+        if (this.navExpanded) {
+          window.Intercom("update", {
+            horizontal_padding: "20",
+            vertical_padding: "20",
+          });
+        } else {
+          window.Intercom("update", {
+            horizontal_padding: "170",
+            vertical_padding: "30",
+          });
         }
+      }
+      this.navExpanded = !this.navExpanded;
+      //collapse any expanded subitems before collapsing to icon menu
+      if (this.navExpanded === false) {
+        this.collapseExpandedSubMenus();
+      }
     },
-    methods: {
-        ...mapActions(useSideNavStore, ["resetShouldCollapse"]),
-        navCollapse() {
-            if (window.Intercom) {
-                if (this.navExpanded) {
-                    window.Intercom("update", {
-                        horizontal_padding: "20",
-                        vertical_padding: "20",
-                    });
-                }
-                else {
-                    window.Intercom("update", {
-                        horizontal_padding: "170",
-                        vertical_padding: "30",
-                    });
-                }
-            }
-            this.navExpanded = !this.navExpanded;
-            //collapse any expanded subitems before collapsing to icon menu
-            if (this.navExpanded === false) {
-                this.collapseExpandedSubMenus();
-            }
-        },
-        manageSubMenus() {
-            this.$nextTick(function () {
-                this.collapseExpandedSubMenus();
-            }.bind(this));
-        },
-        collapseExpandedSubMenus() {
-            for (let item = 0; item < this.$refs.navItemElements.length; item++) {
-                const navSubMenu = this.$refs.navItemElements[item];
-                if (navSubMenu.getAttribute("aria-expanded") === "true") {
-                    navSubMenu.click();
-                }
-                this.resetShouldCollapse();
-            }
-        },
-        hideMobileNavOnClick() {
-            this.$refs.mobileNavDismiss.click();
-        },
+    manageSubMenus() {
+      this.$nextTick(function () {
+        this.collapseExpandedSubMenus();
+      }.bind(this));
     },
+    collapseExpandedSubMenus() {
+      for (let item = 0; item < this.$refs.navItemElements.length; item++) {
+        const navSubMenu = this.$refs.navItemElements[item];
+        if (navSubMenu.getAttribute("aria-expanded") === "true") {
+          navSubMenu.click();
+        }
+        this.resetShouldCollapse();
+      }
+    },
+    hideMobileNavOnClick() {
+      this.$refs.mobileNavDismiss.click();
+    },
+    signOut() {
+      const authStore = useAuthStore();
+      const token = authStore.token; // Get the token from your store
+      axios.post("https://valid-actor-393616.uc.r.appspot.com/api/v1/logout", null, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then(() => {
+        authStore.updateLoginStatus(false); // Update the login status in your store
+        this.$router.push("/login");
+      }).catch((error) => {
+        console.error("Sign Out Failed:", error);
+      });
+    },
+  },
 }
 </script>
 

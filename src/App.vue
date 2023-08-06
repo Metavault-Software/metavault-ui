@@ -19,12 +19,13 @@
 
 <script>
 import SideNav from "./components/SideNav/SideNav.vue";
-import SignIn from "./components/SignIn.vue";
+import SignIn from "./components/SignIn.vue"; // Make sure this path is correct
 
 export default {
   name: "App",
   components: {
-    SideNav
+    SideNav,
+    SignIn, // Make sure to include the SignIn component here
   },
   computed: {
     hideNav: function () {

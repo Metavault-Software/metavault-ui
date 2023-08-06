@@ -8,7 +8,7 @@
       <label>Password</label>
       <input type="password" v-model="password" required/>
 
-      <button @click="signIn">Sign In</button>
+      <button @click="login">Sign In</button>
     </form>
   </div>
 </template>
@@ -16,37 +16,67 @@
 
 <script>
 import axios from "axios";
+import { useAuthStore } from "@/store.js";
 
 export default {
   name: "SignIn",
   methods: {
-    login() {
-      // Your login logic here
-      // Assuming the user successfully logs in, update the login status using the store
-      this.$auth.updateLoginStatus(true);
-    },
-    async signIn() {
-      const apiUrl = "https://valid-actor-393616.uc.r.appspot.com/api/v1/login"; // Replace this with your actual API URL
-
-      const credentials = {
-        email: "john.doe@example.com", // Replace with user-entered email
-        password: "secure_password", // Replace with user-entered password
-      };
+    async login() {
+      const store = useAuthStore();
 
       try {
-        const response = await axios.post(apiUrl, credentials);
-        console.log("Login response:", response.data);
-        // Handle the successful login response here (e.g., store the token, redirect to dashboard, etc.)
+        // Replace 'http://localhost:8080' with the actual URL of your backend server
+        const response = await axios.post("https://valid-actor-393616.uc.r.appspot.com/api/v1/login", {
+          email: this.email,
+          password: this.password,
+        });
+
+        // Assuming the server returns a success response (e.g., status code 200),
+        // update the login status using the store
+        store.updateLoginStatus(true);
+
+        // Optionally, you may want to save the user token or other data from the response
+        // in local storage or cookies for future authenticated requests.
+
+        // Redirect the user to the dashboard or any other authenticated page
+        // using Vue Router's $router.push() method
+        this.$router.push("/");
       } catch (error) {
-        if (error.response) {
-          console.error("Login error:", error.response.data);
-        } else if (error.request) {
-          console.error("Request error:", error.request);
-        } else {
-          console.error("Error:", error.message);
-        }
+        // Handle login errors, display error messages, etc.
+        console.error("Login failed:", error);
       }
     },
+  },
+  async signIn() {
+    const apiUrl = "https://valid-actor-393616.uc.r.appspot.com/api/v1/login"; // Replace this with your actual API URL
+
+    const credentials = {
+      email: "john.doe@example.com", // Replace with user-entered email
+      password: "secure_password", // Replace with user-entered password
+    };
+
+    try {
+      const response = await axios.post(apiUrl, credentials);
+      console.log("Login response:", response.data);
+      // Assuming the server returns a success response (e.g., status code 200),
+      // update the login status using the store
+      this.$store.dispatch("updateLoginStatus", true);
+
+      // Optionally, you may want to save the user token or other data from the response
+      // in local storage or cookies for future authenticated requests.
+
+      // Redirect the user to the dashboard or any other authenticated page
+      // using Vue Router's $router.push() method
+      this.$router.push("/dashboard");
+    } catch (error) {
+      if (error.response) {
+        console.error("Login error:", error.response.data);
+      } else if (error.request) {
+        console.error("Request error:", error.request);
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
   },
 };
 </script>
